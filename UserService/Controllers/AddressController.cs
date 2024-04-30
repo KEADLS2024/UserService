@@ -21,7 +21,7 @@ namespace UserService.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Address>>> GetAddresses()
         {
-            var addresses = await _addressesManager.GetAddressesAsync();
+            var addresses = await _addressesManager.GetAllAddressesAsync();
 
             if (addresses == null)
             {
@@ -84,7 +84,7 @@ namespace UserService.Controllers
 
             if (!deleted)
             {
-                return NotFound($"Address with ID {id} not found.");
+                return base.NotFound($"Address with ID {id} not found.");
             }
 
             return NoContent();

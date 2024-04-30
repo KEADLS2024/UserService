@@ -4,10 +4,10 @@ namespace UserService.Interfaces
 {
     public interface ICustomerManager
     {
-        Task<IEnumerable<Customer>> GetAllCustomersAsync();
-        Task<Customer> GetCustomerByIdAsync(int customerId);
-        Task AddCustomerAsync(Customer customer);
-        Task UpdateCustomerAsync(Customer customer);
+        Task<IEnumerable<Customer>> GetAll();
+        Task<Customer> Get(int customerId);
+        Task<Customer> CreateCustomerAsync(Customer customer);
+        Task<bool> UpdateCustomerAsync(Customer customer);
         Task DeleteCustomerAsync(int customerId);
         Task<bool> Exists(int customerId);
     }

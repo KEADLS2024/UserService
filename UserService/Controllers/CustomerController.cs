@@ -15,7 +15,7 @@ namespace UserService.Controllers
 
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<Customer>>> GetAllCustomers()
         {
             var customers = await _customersManager.GetAll();
 
@@ -43,16 +43,12 @@ namespace UserService.Controllers
 
         // PUT: api/Customers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
+        public async Task<IActionResult> PutCustomer(Customer customer)
         {
-            if (id != customer.CustomerId)
-            {
-                return BadRequest();
-            }
 
             try
             {
-                await _customersManager.Update(id, customer);
+                await _customersManager.UpdateCustomerAsync( customer);
             }
             catch (KeyNotFoundException)
             {
@@ -66,7 +62,7 @@ namespace UserService.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            var createdCustomer = await _customersManager.Create(customer);
+            var createdCustomer = await _customersManager.CreateCustomerAsync(customer);
 
             return CreatedAtAction(nameof(GetCustomer), new { id = createdCustomer.CustomerId }, createdCustomer);
         }
@@ -77,7 +73,7 @@ namespace UserService.Controllers
         {
             try
             {
-                await _customersManager.Delete(id);
+                await _customersManager.DeleteCustomerAsync(id);
             }
             catch (KeyNotFoundException)
             {

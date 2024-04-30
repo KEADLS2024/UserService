@@ -22,8 +22,9 @@ builder.Services.AddScoped<AddressManager>();
 
 // Register the repository implementations for dependency injection
 
-builder.Services.AddScoped<ICustomerManager, ICustomerManager>();
-builder.Services.AddScoped<IAddressManager, IAddressManager >();
+builder.Services.AddScoped<ICustomerManager, CustomerManager>();
+builder.Services.AddScoped<IAddressManager, AddressManager>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -37,6 +38,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
 

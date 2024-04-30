@@ -1,45 +1,64 @@
-﻿using UserService.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Net;
+using UserService.Data;
+using UserService.Interfaces;
 using UserService.Models;
 
 namespace UserService.Managers
 {
-    public class CustomerManager
+    public class CustomerManager : ICustomerManager 
     {
-        private readonly ICustomerManager _customersRepository;
+        private readonly MyDbContext _dbContext;
 
-        public CustomerManager(ICustomerManager customersRepository)
+        public CustomerManager(MyDbContext myDbContext)
         {
-            _customersRepository = customersRepository;
+            _dbContext = myDbContext;
         }
 
         public async Task<IEnumerable<Customer>> GetAll()
         {
-            return await _customersRepository.GetAllCustomersAsync();
+            return await _dbContext.Customers.ToListAsync();
         }
 
         public async Task<Customer> Get(int id)
         {
-            return await _customersRepository.GetCustomerByIdAsync(id);
+            return await _dbContext.Customers.FindAsync(id);
         }
 
-        public async Task Update(int id, Customer customer)
+        public async Task<bool> UpdateCustomerAsync( Customer customer)
         {
-            await _customersRepository.UpdateCustomerAsync(customer);
+            _dbContext.Entry(customer).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<Customer> Create(Customer customer)
+        public async Task<Customer> CreateCustomerAsync(Customer customer)               
         {
-            await _customersRepository.AddCustomerAsync(customer);
-            return customer; // Assuming the repository handles SaveChangesAsync and returns the added entity
+            _dbContext.Customers.Add(customer);
+            await _dbContext.SaveChangesAsync();
+            return customer;
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> DeleteCustomerAsync(Customer customer)
         {
-            var customer = await _customersRepository.GetCustomerByIdAsync(id);
+            _dbContext.Customers.Remove(customer);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task DeleteCustomerAsync(int customerId)
+        {
+            var customer = await _dbContext.Customers.FindAsync(customerId);
             if (customer != null)
             {
-                await _customersRepository.DeleteCustomerAsync(customer.CustomerId); // Use the correct property name
+                _dbContext.Customers.Remove(customer);
+                await _dbContext.SaveChangesAsync();
             }
+        }
+
+        public async Task<bool> Exists(int customerId)
+        {
+            return await _dbContext.Customers.AnyAsync(c => c.CustomerId == customerId);
         }
     }
 }

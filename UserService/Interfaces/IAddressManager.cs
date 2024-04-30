@@ -1,4 +1,5 @@
-﻿using UserService.Models;
+﻿using System.Threading.Tasks;
+using UserService.Models;
 
 namespace UserService.Interfaces
 {
@@ -6,9 +7,9 @@ namespace UserService.Interfaces
     {
         Task<IEnumerable<Address>> GetAllAddressesAsync();
         Task<Address> GetAddressByIdAsync(int addressId);
-        Task AddAddressAsync(Address address);
-        Task UpdateAddressAsync(Address address);
-        Task DeleteAddressAsync(Address address);
+        Task<Address> CreateAddressAsync(Address address);
+        Task<bool> UpdateAddressAsync(Address address);
+        Task<bool> DeleteAddressAsync(int id);
         Task<bool> AddressExistsAsync(int addressId);
     }
 }
