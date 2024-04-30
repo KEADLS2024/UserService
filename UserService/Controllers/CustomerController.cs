@@ -4,7 +4,9 @@ using UserService.Managers;
 
 namespace UserService.Controllers
 {
-    public class CustomerController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CustomerController : ControllerBase
     {
         private readonly CustomerManager _customersManager;
 
@@ -15,24 +17,17 @@ namespace UserService.Controllers
 
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetAllCustomers()
+        public async Task<ActionResult<IEnumerable<Customer>>> Get()
         {
             var customers = await _customersManager.GetAll();
-
-            if (customers == null)
-            {
-                return NotFound();
-            }
-
             return Ok(customers);
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public async Task<ActionResult<Customer>> Get(int id)
         {
             var customer = await _customersManager.Get(id);
-
             if (customer == null)
             {
                 return NotFound();
@@ -43,7 +38,7 @@ namespace UserService.Controllers
 
         // PUT: api/Customers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(Customer customer)
+        public async Task<IActionResult> Put(Customer customer)
         {
 
             try
@@ -60,16 +55,16 @@ namespace UserService.Controllers
 
         // POST: api/Customers
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<Customer>> Post([FromBody] Customer customer)
         {
             var createdCustomer = await _customersManager.CreateCustomerAsync(customer);
 
-            return CreatedAtAction(nameof(GetCustomer), new { id = createdCustomer.CustomerId }, createdCustomer);
+            return CreatedAtAction(nameof(Get), new { id = createdCustomer.CustomerId }, createdCustomer);
         }
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
