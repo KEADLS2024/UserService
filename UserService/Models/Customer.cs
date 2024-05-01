@@ -38,6 +38,9 @@ namespace UserService.Models
         [Required(ErrorMessage = "User ID is required.")]
         [ForeignKey("UserCredential")]
         public int UserId { get; set; }
+
+
+
         //public UserCredential UserCredential { get; set; }
 
         //public ICollection<OrderTable> Orders { get; set; }
