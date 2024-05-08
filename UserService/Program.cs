@@ -1,13 +1,23 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using UserService.Controllers;
 using UserService.Data;
 using UserService.Managers;
 using UserService.Interfaces;
+using UserService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
+
+
+
+
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddScoped<CustomerController>();
+builder.Services.AddHostedService<UserProcessingService>();
 
 // Register the DbContext with dependency injection to access the database context throughout the application.
 builder.Services.AddDbContext<MyDbContext>(options =>

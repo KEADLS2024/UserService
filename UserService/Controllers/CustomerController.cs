@@ -25,7 +25,7 @@ namespace UserService.Controllers
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> Get(int id)
+        public async Task<ActionResult<Customer>> GetbyID(int id)
         {
             var customer = await _customersManager.Get(id);
             if (customer == null)
@@ -61,6 +61,8 @@ namespace UserService.Controllers
 
             return CreatedAtAction(nameof(Get), new { id = createdCustomer.CustomerId }, createdCustomer);
         }
+
+
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
