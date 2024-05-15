@@ -1,13 +1,28 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using UserService.Controllers;
 using UserService.Data;
 using UserService.Managers;
 using UserService.Interfaces;
+using UserService.Services;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
+
+
+
+builder.Services.AddHostedService<RabbitMQListener>();
+builder.Services.AddControllers(); // Dette registrerer controllers og deres afhængigheder, hvis du bruger Controller-aktiverede services
+builder.Services.AddScoped<CustomerController>(); // Registrerer CustomerController så den kan injiceres
+builder.Services.AddHostedService<RabbitMQListener>();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+
 
 // Register the DbContext with dependency injection to access the database context throughout the application.
 builder.Services.AddDbContext<MyDbContext>(options =>
@@ -48,3 +63,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+

@@ -33,7 +33,7 @@ namespace UserService.Models
         [Required(ErrorMessage = "Address ID is required.")]
         [ForeignKey("Address")]
         public int AddressId { get; set; }
-        public Address Address { get; set; }
+       // public Address Address { get; set; }
 
         [Required(ErrorMessage = "User ID is required.")]
         [ForeignKey("UserCredential")]
