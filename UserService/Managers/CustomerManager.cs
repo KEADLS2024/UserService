@@ -32,12 +32,29 @@ namespace UserService.Managers
             return true;
         }
 
-        public async Task<Customer> CreateCustomerAsync(Customer customer)               
+        //public async Task<Customer> CreateCustomerAsync(Customer customer)               
+        //{
+        //    _dbContext.Customers.Add(customer);
+        //    await _dbContext.SaveChangesAsync();
+        //    return customer;
+        //}
+        public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
+            // Check if the customer already exists
+            var existingCustomer = await _dbContext.Customers
+                .AnyAsync(c => c.Email == customer.Email);
+
+            if (existingCustomer)
+            {
+                // Handle the case, e.g., throw an exception or return null
+                throw new Exception("Customer with the given email already exists.");
+            }
+
             _dbContext.Customers.Add(customer);
             await _dbContext.SaveChangesAsync();
             return customer;
         }
+
 
         public async Task<bool> DeleteCustomerAsync(Customer customer)
         {
